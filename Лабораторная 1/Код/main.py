@@ -14,5 +14,12 @@ if __name__ == "__main__":
         canvas.Colour(0, 255, 0)
     )
 
+    layer = canvas.Lines.bresenham(
+        layer,
+        canvas.Point(0, 0),
+        canvas.Point(49, 10),
+        canvas.Colour(255, 0, 0)
+    )
+
     layer.show()
     layer.save("image.png")
