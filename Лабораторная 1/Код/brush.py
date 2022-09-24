@@ -10,6 +10,7 @@ class Lines:
             start_point: tp.Point,
             end_point: tp.Point,
             colour: tp.Colour,
+            intensity: tp.Intensity
     ):
         length = max(
             abs(
@@ -25,7 +26,8 @@ class Lines:
 
         layer.paint(
             start_point,
-            colour
+            colour,
+            intensity
         )
 
         for _ in range(length):
@@ -37,6 +39,7 @@ class Lines:
                     int(np.round(start_point.width, 0)),
                 ),
                 colour,
+                intensity
             )
 
         return layer
@@ -47,6 +50,7 @@ class Lines:
             start_point: tp.Point,
             end_point: tp.Point,
             colour: tp.Colour,
+            intensity: tp.Intensity
     ):
         delta_width = end_point.width - start_point.width
         delta_height = end_point.height - start_point.height
@@ -72,7 +76,8 @@ class Lines:
 
         layer.paint(
             tp.Point(height, width),
-            colour
+            colour,
+            intensity
         )
 
         while index < el:
@@ -87,7 +92,19 @@ class Lines:
             index += 1
             layer.paint(
                 tp.Point(height, width),
-                colour
+                colour,
+                intensity,
             )
+
+        return layer
+
+    @staticmethod
+    def wu(
+            layer: bd.Layer,
+            start_point: tp.Point,
+            end_point: tp.Point,
+            colour: tp.Colour,
+            intensity: tp.Intensity
+    ):
 
         return layer

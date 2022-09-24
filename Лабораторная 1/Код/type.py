@@ -79,3 +79,14 @@ class Colour:
     @staticmethod
     def get_size():
         return 3
+
+
+@dataclass
+class Intensity:
+    value: int
+
+    def __post_init__(self):
+        self.value = validate(
+            self.value,
+            generic=Gamut.size
+        )[0]
