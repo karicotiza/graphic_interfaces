@@ -106,5 +106,61 @@ class Lines:
             colour: tp.Colour,
             intensity: tp.Intensity
     ):
+        steep = abs(end_point.height - start_point.height) > abs(end_point.width - start_point.width)
+
+        if steep:
+            start_point.width, start_point.height = start_point.height, start_point.width
+            end_point.width, end_point.height = end_point.height, end_point.width
+        else:
+            pass
+
+        if start_point.width > end_point.width:
+            start_point.height, end_point.height = end_point.height, start_point.height
+            start_point.width, end_point.width = end_point.width, start_point.width
+
+        delta_height = end_point.height - start_point.height
+        delta_width = end_point.width - start_point.width
+
+        gradient = delta_height / delta_width
+        width_end = round(start_point.width, 1)
+        height_end = start_point.height + gradient * (width_end - start_point.width)
+        width_start_pixel = width_end
+        intersection = height_end + gradient
+        width_end = round(end_point.width, 1)
+        width_end_pixel = width_end
+
+        if steep:
+            for width in range(width_start_pixel, width_end_pixel):
+                layer.paint(
+                    tp.Point(width, int(intersection)),
+                    colour,
+                    tp.Intensity(int((1 - (intersection % 1)) * intensity.value))
+                )
+                layer.paint(
+                    tp.Point(width, int(intersection) + 1),
+                    colour,
+                    tp.Intensity(int(intersection % 1 * intensity.value))
+                )
+                intersection = intersection + gradient
+
+            layer.paint(
+                tp.Point(width_end_pixel, int(intersection)),
+                colour,
+                tp.Intensity(int((1 - (intersection % 1)) * intensity.value))
+            )
+
+        else:
+            for width in range(width_start_pixel, width_end_pixel + 1):
+                layer.paint(
+                    tp.Point(int(intersection), width),
+                    colour,
+                    tp.Intensity(int((1 - (intersection % 1)) * intensity.value))
+                )
+                layer.paint(
+                    tp.Point(int(intersection) + 1, width),
+                    colour,
+                    tp.Intensity(int(intersection % 1 * intensity.value))
+                )
+                intersection = intersection + gradient
 
         return layer
