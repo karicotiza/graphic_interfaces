@@ -164,3 +164,223 @@ class Lines:
                 intersection = intersection + gradient
 
         return layer
+
+
+class Circles:
+    @staticmethod
+    def circle(
+            layer: bd.Layer,
+            start_point: tp.Point,
+            radius: tp.Dimension,
+            colour: tp.Colour,
+            intensity: tp.Intensity
+    ):
+        disp_x = start_point.width
+        disp_y = start_point.height
+        x = 0
+        y = radius.size
+        delta = (1 - 2 * radius.size)
+
+        while y >= 0:
+            layer.paint(tp.Point(disp_y + y, disp_x + x), colour, intensity)
+            layer.paint(tp.Point(disp_y - y, disp_x + x), colour, intensity)
+            layer.paint(tp.Point(disp_y + y, disp_x - x), colour, intensity)
+            layer.paint(tp.Point(disp_y - y, disp_x - x), colour, intensity)
+
+            error = 2 * (delta + y) - 1
+
+            if (delta < 0) and (error <= 0):
+                x += 1
+                delta = delta + (2 * x + 1)
+                continue
+
+            error = 2 * (delta - x) - 1
+
+            if (delta > 0) and (error > 0):
+                y -= 1
+                delta = delta + (1 - 2 * y)
+                continue
+
+            x += 1
+            delta = delta + (2 * (x - y))
+            y -= 1
+
+        return layer
+
+    @staticmethod
+    def ellipse(
+            layer: bd.Layer,
+            start_point: tp.Point,
+            width: tp.Dimension,
+            height: tp.Dimension,
+            colour: tp.Colour,
+            intensity: tp.Intensity
+    ):
+        rx = width.size
+        ry = height.size
+
+        x = 0
+        y = ry
+
+        d1 = ((ry * ry) - (rx * rx * ry) + (0.25 * rx * rx))
+        dx = 2 * ry * ry * x
+        dy = 2 * rx * rx * y
+
+        while dx < dy:
+            layer.paint(tp.Point(y + start_point.height, x + start_point.width), colour, intensity)
+            layer.paint(tp.Point(y + start_point.height, -x + start_point.width), colour, intensity)
+            layer.paint(tp.Point(-y + start_point.height, x + start_point.width), colour, intensity)
+            layer.paint(tp.Point(-y + start_point.height, -x + start_point.width), colour, intensity)
+
+            if d1 < 0:
+                x += 1
+                dx = dx + (2 * ry * ry)
+                d1 = d1 + dx + (ry * ry)
+            else:
+                x += 1
+                y -= 1
+                dx = dx + (2 * ry * ry)
+                dy = dy - (2 * rx * rx)
+                d1 = d1 + dx - dy + (ry * ry)
+
+        d2 = (((ry * ry) * ((x + 0.5) * (x + 0.5))) +
+              ((rx * rx) * ((y - 1) * (y - 1))) -
+              (rx * rx * ry * ry))
+
+        while y >= 0:
+            layer.paint(tp.Point(y + start_point.height, x + start_point.width), colour, intensity)
+            layer.paint(tp.Point(y + start_point.height, -x + start_point.width), colour, intensity)
+            layer.paint(tp.Point(-y + start_point.height, x + start_point.width), colour, intensity)
+            layer.paint(tp.Point(-y + start_point.height, -x + start_point.width), colour, intensity)
+
+            if d2 > 0:
+                y -= 1
+                dy = dy - (2 * rx * rx)
+                d2 = d2 + (rx * rx) - dy
+            else:
+                y -= 1
+                x += 1
+                dx = dx + (2 * ry * ry)
+                dy = dy - (2 * rx * rx)
+                d2 = d2 + dx - dy + (rx * rx)
+
+        return layer
+
+    @staticmethod
+    def parabola(
+            layer: bd.Layer,
+            start_point: tp.Point,
+            width: tp.Dimension,
+            height: tp.Dimension,
+            colour: tp.Colour,
+            intensity: tp.Intensity
+    ):
+        start_point.height -= height.size
+        rx = width.size
+        ry = height.size
+
+        x = 0
+        y = ry
+
+        d1 = ((ry * ry) - (rx * rx * ry) + (0.25 * rx * rx))
+        dx = 2 * ry * ry * x
+        dy = 2 * rx * rx * y
+
+        while dx < dy:
+            layer.paint(tp.Point(y + start_point.height, x + start_point.width), colour, intensity)
+            layer.paint(tp.Point(y + start_point.height, -x + start_point.width), colour, intensity)
+
+            if d1 < 0:
+                x += 1
+                dx = dx + (2 * ry * ry)
+                d1 = d1 + dx + (ry * ry)
+            else:
+                x += 1
+                y -= 1
+                dx = dx + (2 * ry * ry)
+                dy = dy - (2 * rx * rx)
+                d1 = d1 + dx - dy + (ry * ry)
+
+        d2 = (((ry * ry) * ((x + 0.5) * (x + 0.5))) +
+              ((rx * rx) * ((y - 1) * (y - 1))) -
+              (rx * rx * ry * ry))
+
+        while y >= 0:
+            layer.paint(tp.Point(y + start_point.height, x + start_point.width), colour, intensity)
+            layer.paint(tp.Point(y + start_point.height, -x + start_point.width), colour, intensity)
+
+            if d2 > 0:
+                y -= 1
+                dy = dy - (2 * rx * rx)
+                d2 = d2 + (rx * rx) - dy
+            else:
+                y -= 1
+                x += 1
+                dx = dx + (2 * ry * ry)
+                dy = dy - (2 * rx * rx)
+                d2 = d2 + dx - dy + (rx * rx)
+
+        return layer
+
+    @staticmethod
+    def hyperbola(
+            layer: bd.Layer,
+            start_point: tp.Point,
+            width: tp.Dimension,
+            height: tp.Dimension,
+            colour: tp.Colour,
+            intensity: tp.Intensity
+    ):
+        rx = width.size
+        ry = height.size
+
+        x = 0
+        y = ry
+
+        d1 = ((ry * ry) - (rx * rx * ry) + (0.25 * rx * rx))
+        dx = 2 * ry * ry * x
+        dy = 2 * rx * rx * y
+
+        while dx < dy:
+            layer.paint(
+                tp.Point(y + start_point.height - height.size, -x + start_point.width + width.size), colour, intensity
+            )
+            layer.paint(
+                tp.Point(-y + start_point.height + height.size, x + start_point.width - width.size), colour, intensity
+            )
+
+            if d1 < 0:
+                x += 1
+                dx = dx + (2 * ry * ry)
+                d1 = d1 + dx + (ry * ry)
+            else:
+                x += 1
+                y -= 1
+                dx = dx + (2 * ry * ry)
+                dy = dy - (2 * rx * rx)
+                d1 = d1 + dx - dy + (ry * ry)
+
+        d2 = (((ry * ry) * ((x + 0.5) * (x + 0.5))) +
+              ((rx * rx) * ((y - 1) * (y - 1))) -
+              (rx * rx * ry * ry))
+
+        while y >= 0:
+            layer.paint(
+                tp.Point(y + start_point.height- height.size, -x + start_point.width + width.size), colour, intensity
+            )
+            layer.paint(
+                tp.Point(-y + start_point.height + height.size, x + start_point.width - width.size), colour, intensity
+            )
+
+            if d2 > 0:
+                y -= 1
+                dy = dy - (2 * rx * rx)
+                d2 = d2 + (rx * rx) - dy
+            else:
+                y -= 1
+                x += 1
+                dx = dx + (2 * ry * ry)
+                dy = dy - (2 * rx * rx)
+                d2 = d2 + dx - dy + (rx * rx)
+
+        return layer

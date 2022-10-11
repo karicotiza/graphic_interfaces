@@ -7,37 +7,48 @@ if __name__ == "__main__":
         colour=canvas.Colour(255, 255, 255)
     )
 
-    layer = canvas.Lines.wu(
+    layer = canvas.Circles.hyperbola(
         layer,
-        canvas.Point(25, 10),
-        canvas.Point(15, 40),
+        canvas.Point(25, 25),
+        canvas.Dimension(10),
+        canvas.Dimension(10),
         canvas.Colour(255, 0, 0),
-        canvas.Intensity(128)
+        canvas.Intensity(255),
     )
 
-    layer = canvas.Lines.wu(
-        layer,
-        canvas.Point(10, 25),
-        canvas.Point(40, 35),
-        canvas.Colour(255, 255, 0),
-        canvas.Intensity(128)
-    )
+    layer.save("image1.png")
 
-    layer = canvas.Lines.wu(
-        layer,
-        canvas.Point(25, 40),
-        canvas.Point(35, 10),
-        canvas.Colour(0, 255, 255),
-        canvas.Intensity(128)
-    )
+    # layer = canvas.Lines.wu(
+    #     layer,
+    #     canvas.Point(25, 10),
+    #     canvas.Point(15, 40),
+    #     canvas.Colour(255, 0, 0),
+    #     canvas.Intensity(128)
+    # )
+    #
+    # layer = canvas.Lines.wu(
+    #     layer,
+    #     canvas.Point(10, 25),
+    #     canvas.Point(40, 35),
+    #     canvas.Colour(255, 255, 0),
+    #     canvas.Intensity(128)
+    # )
+    #
+    # layer = canvas.Lines.wu(
+    #     layer,
+    #     canvas.Point(25, 40),
+    #     canvas.Point(35, 10),
+    #     canvas.Colour(0, 255, 255),
+    #     canvas.Intensity(128)
+    # )
+    #
+    # layer = canvas.Lines.wu(
+    #     layer,
+    #     canvas.Point(40, 25),
+    #     canvas.Point(10, 15),
+    #     canvas.Colour(0, 0, 255),
+    #     canvas.Intensity(128)
+    # )
 
-    layer = canvas.Lines.wu(
-        layer,
-        canvas.Point(40, 25),
-        canvas.Point(10, 15),
-        canvas.Colour(0, 0, 255),
-        canvas.Intensity(128)
-    )
-
-    layer.show()
-    layer.save("image.png")
+    # layer.show()
+    layer.save("background.png")
